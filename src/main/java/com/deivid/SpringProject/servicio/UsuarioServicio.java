@@ -25,16 +25,6 @@ public class UsuarioServicio implements IUsuarioServicio{
     }
     
     public void IngresarUsuario(Usuario usuario){
-    /*    Usuario nuevoUsuario = new Usuario();
-        Rol rol;
-        nuevoUsuario.setNombre("David");
-        nuevoUsuario.setCedula("10050005001");
-        nuevoUsuario.setEmail("david@gmail.com");
-        nuevoUsuario.setDireccion("Calle 11 No. 2 - 15");
-        nuevoUsuario.setTelefono("3153335555");
-        nuevoUsuario.setRol(Rol.Cliente);
-        nuevoUsuario.setContrasena("123456");
-    */
         usuarioRepositorio.save(usuario);
     }
 

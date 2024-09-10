@@ -11,8 +11,6 @@ public interface IUsuarioServicio  {
     public Usuario MostrarUsuarioID(Integer idUsuario);
     
     public void IngresarUsuario(Usuario usuario);
-    
-    //public void ModificarUsuario(Usuario usuario);
 
     public void EliminarUsuario(Usuario usuario);
     
