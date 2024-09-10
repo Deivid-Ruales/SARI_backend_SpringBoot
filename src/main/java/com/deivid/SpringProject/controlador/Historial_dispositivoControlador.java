@@ -27,12 +27,6 @@ public class Historial_dispositivoControlador {
     @Autowired
     private IHistorial_dispositivoServicio historialDispositivoServicio;
 
-    @Autowired
-    private IDispositivoServicio dispositivoServicio;
-
-    @Autowired
-    private ITurno_trabajoServicio turnoTrabajoServicio;
-
     @GetMapping
     public List<Historial_dispositivo> MostrarHistoriales() {
         var historiales = historialDispositivoServicio.MostrarTodosHistoriales();
@@ -67,18 +61,8 @@ public class Historial_dispositivoControlador {
         historial.setPaginas_impresas(historialNew.getPaginas_impresas());
         historial.setPaginas_adf(historialNew.getPaginas_adf());
         historial.setObservaciones(historialNew.getObservaciones());
-
-        // Buscar entidades asociadas
-        Dispositivo dispositivo = dispositivoServicio.MostrarDispositivoID(historialNew.getDispositivo().getId_dispositivo());
-        Turno_trabajo turno = turnoTrabajoServicio.MostrarTurnoID(historialNew.getTurno().getId_turno());
-
-        if (dispositivo == null || turno == null) {
-            throw new ExcepcionRecursoNoEncontrado("No se encontró el dispositivo o el turno especificado.");
-        }
-
-        // Establecer las entidades en el historial
-        historial.setDispositivo(dispositivo);
-        historial.setTurno(turno);
+        historial.setDispositivo(historialNew.getDispositivo());
+        historial.setTurno(historialNew.getTurno());
 
         historialDispositivoServicio.IngresarHistorial(historial);
         return ResponseEntity.ok(historial);
