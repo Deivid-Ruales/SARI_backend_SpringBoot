@@ -32,4 +32,9 @@ public class DispositivoServicio implements IDispositivoServicio {
     public void EliminarDispositivo(Dispositivo dispositivo) {
         dispositivoRepositorio.delete(dispositivo);
     }
+
+    @Override
+    public List<Dispositivo> MostrarDispositivosIdUsuario(Integer idUsuario) {
+        return dispositivoRepositorio.findAll();
+    }
 }

@@ -17,4 +17,7 @@ public interface IDispositivoServicio {
 
     // Elimina un dispositivo
     void EliminarDispositivo(Dispositivo dispositivo);
+    
+    // Filtra los dispositivos por id de usuario
+    List<Dispositivo> MostrarDispositivosIdUsuario (Integer idUsuario);
 }

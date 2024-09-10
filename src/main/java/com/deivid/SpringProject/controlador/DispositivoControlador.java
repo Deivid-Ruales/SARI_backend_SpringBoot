@@ -4,9 +4,11 @@ import com.deivid.SpringProject.modelo.Dispositivo;
 import com.deivid.Excepcion.ExcepcionRecursoNoEncontrado;
 import com.deivid.SpringProject.servicio.IDispositivoServicio;
 import com.deivid.SpringProject.servicio.DispositivoServicio;
+import com.deivid.SpringProject.servicio.IUsuarioServicio;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class DispositivoControlador {
 
     @Autowired
     private IDispositivoServicio dispositivoServicio;
+    
+    @Autowired 
+    private IUsuarioServicio usuarioServicio;
 
     @GetMapping
     public List<Dispositivo> MostrarDispositivos() {
@@ -72,5 +77,21 @@ public class DispositivoControlador {
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
+    }
+
+    @GetMapping("/cliente/{id}")
+    public List<Dispositivo> MostrarDispositivoPorUsuario(@PathVariable Integer id) {
+        // Obtén usuario por id
+        var usuario = usuarioServicio.MostrarUsuarioID(id);
+                
+        // Obtén todos los dispositivos
+        var dispositivos = dispositivoServicio.MostrarTodosDispositivos();
+
+        // Filtrar dispositivos por el id del usuario asociado
+        List<Dispositivo> dispositivosFiltrados = dispositivos.stream()
+                .filter(dispositivo -> dispositivo.getUsuario() .equals(usuario))
+                .collect(Collectors.toList());
+
+        return dispositivosFiltrados;
     }
 }

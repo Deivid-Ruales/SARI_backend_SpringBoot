@@ -32,7 +32,7 @@ public class UsuarioControlador {
     @Autowired 
     private IUsuarioServicio usuarioServicio;
     
-    @GetMapping("/")
+    @GetMapping
     public List<Usuario> MostrarUsuarios (){
         var usuarios = usuarioServicio.MostrarTodosUsuarios();
         usuarios.forEach(usuario -> logger.info(usuario.toString()));
@@ -48,7 +48,7 @@ public class UsuarioControlador {
         return ResponseEntity.ok(usuario);
     }
     
-    @PostMapping("/")
+    @PostMapping
     public void IngresarUsuario (@RequestBody Usuario usuario) {
         logger.info("Usuario a ingresar: " + usuario);
         usuarioServicio.IngresarUsuario(usuario);
