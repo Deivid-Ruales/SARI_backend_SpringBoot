@@ -81,10 +81,10 @@ public class DispositivoControlador {
 
     @GetMapping("/cliente/{id}")
     public List<Dispositivo> MostrarDispositivoPorUsuario(@PathVariable Integer id) {
-        // Obtén usuario por id
+        // Obtener usuario por id
         var usuario = usuarioServicio.MostrarUsuarioID(id);
                 
-        // Obtén todos los dispositivos
+        // Obtener todos los dispositivos
         var dispositivos = dispositivoServicio.MostrarTodosDispositivos();
 
         // Filtrar dispositivos por el id del usuario asociado

@@ -32,4 +32,9 @@ public class Historial_dispositivoServicio implements IHistorial_dispositivoServ
     public void EliminarHistorial(Historial_dispositivo historial) {
         historialDispositivoRepositorio.delete(historial);
     }
+
+    @Override
+    public List<Historial_dispositivo> MostrarHistorialesIdDispositivo(Integer idDispositivo) {
+        return historialDispositivoRepositorio.findAll();
+    }
 }

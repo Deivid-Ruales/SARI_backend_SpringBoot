@@ -11,6 +11,7 @@ import com.deivid.SpringProject.servicio.ITurno_trabajoServicio;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class Historial_dispositivoControlador {
 
     @Autowired
     private IHistorial_dispositivoServicio historialDispositivoServicio;
+    
+    @Autowired
+    private IDispositivoServicio dispositivoServicio;
 
     @GetMapping
     public List<Historial_dispositivo> MostrarHistoriales() {
@@ -78,5 +82,21 @@ public class Historial_dispositivoControlador {
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
+    }
+    
+    @GetMapping("/dispositivo/{id}")
+    public List<Historial_dispositivo> MostrarHistorialesIdDispositivo (@PathVariable Integer id) {
+        // Obtener dispositivo por id
+        var dispositivo = dispositivoServicio.MostrarDispositivoID(id);
+                
+        // Obtener todos los historiales
+        var historiales = historialDispositivoServicio.MostrarTodosHistoriales();
+        
+        // Filtrar dispositivos por el id del usuario asociado
+        List<Historial_dispositivo> historialesFiltrados = historiales.stream()
+                .filter(historial -> historial.getDispositivo() .equals(dispositivo))
+                .collect(Collectors.toList());
+
+        return historialesFiltrados;
     }
 }

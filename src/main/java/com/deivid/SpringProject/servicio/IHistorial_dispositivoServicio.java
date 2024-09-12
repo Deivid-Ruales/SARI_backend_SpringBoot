@@ -17,4 +17,7 @@ public interface IHistorial_dispositivoServicio {
 
     // Elimina un historial de dispositivo
     void EliminarHistorial(Historial_dispositivo historial);
+    
+    // Muestra historial de un dispositivo por Id de dispositivo
+    List<Historial_dispositivo> MostrarHistorialesIdDispositivo(Integer idDispositivo);
 }
