@@ -14,4 +14,6 @@ public interface IUsuarioServicio  {
 
     public void EliminarUsuario(Usuario usuario);
     
+    public List<Usuario> MostrarSoloEmpleados();
+    
 }

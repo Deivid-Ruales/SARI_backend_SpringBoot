@@ -2,11 +2,14 @@ package com.deivid.SpringProject.controlador;
 
 import com.deivid.SpringProject.modelo.Usuario;
 import com.deivid.Excepcion.ExcepcionRecursoNoEncontrado;
+import com.deivid.SpringProject.modelo.Dispositivo;
+import com.deivid.SpringProject.modelo.Rol;
 import com.deivid.SpringProject.servicio.IUsuarioServicio;
 import com.deivid.SpringProject.servicio.UsuarioServicio;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +86,21 @@ public class UsuarioControlador {
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
+    }
+    
+    @GetMapping("/empleados")
+    public List<Usuario> MostrarSoloEmpleados() {                
+        // Obtener todos los usuarios
+        var usuarios = usuarioServicio.MostrarTodosUsuarios();
+        
+        // Declaro el rol que necesito filtrar del enum
+        Rol rol = Rol.Empleado;
+        
+        // Filtrar usuarios por el rol = empleado
+        List<Usuario> usuariosFiltrados = usuarios.stream()
+                .filter(usuario -> usuario.getRol() .equals(rol))
+                .collect(Collectors.toList());
+
+        return usuariosFiltrados;
     }
 }

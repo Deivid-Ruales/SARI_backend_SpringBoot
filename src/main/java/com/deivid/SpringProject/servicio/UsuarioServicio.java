@@ -32,4 +32,9 @@ public class UsuarioServicio implements IUsuarioServicio{
     public void EliminarUsuario(Usuario usuario) {
         usuarioRepositorio.delete(usuario);
     }
+
+    @Override
+    public List<Usuario> MostrarSoloEmpleados() {
+        return usuarioRepositorio.findAll();
+    }
 }
