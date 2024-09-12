@@ -20,4 +20,7 @@ public interface IHistorial_dispositivoServicio {
     
     // Muestra historial de un dispositivo por Id de dispositivo
     List<Historial_dispositivo> MostrarHistorialesIdDispositivo(Integer idDispositivo);
+    
+    // Ingresa un nuevo historial de dispositivo pasando Id de dispositivo
+    void IngresarHistorialIdDispositivo(Integer idDispositivo, Historial_dispositivo historial);
 }

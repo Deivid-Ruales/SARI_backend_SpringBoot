@@ -37,4 +37,9 @@ public class Historial_dispositivoServicio implements IHistorial_dispositivoServ
     public List<Historial_dispositivo> MostrarHistorialesIdDispositivo(Integer idDispositivo) {
         return historialDispositivoRepositorio.findAll();
     }
+
+    @Override
+    public void IngresarHistorialIdDispositivo(Integer idDispositivo, Historial_dispositivo historial) {
+        historialDispositivoRepositorio.save(historial);
+    }
 }

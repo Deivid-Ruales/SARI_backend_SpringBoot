@@ -30,7 +30,10 @@ public class Historial_dispositivoControlador {
     
     @Autowired
     private IDispositivoServicio dispositivoServicio;
-
+    
+    @Autowired
+    private ITurno_trabajoServicio turnoServicio;
+    
     @GetMapping
     public List<Historial_dispositivo> MostrarHistoriales() {
         var historiales = historialDispositivoServicio.MostrarTodosHistoriales();
@@ -98,5 +101,17 @@ public class Historial_dispositivoControlador {
                 .collect(Collectors.toList());
 
         return historialesFiltrados;
+    }
+    
+    @PostMapping("/{id}")
+    public void IngresarHistorialIdDispositivo (@PathVariable Integer id, @RequestBody Historial_dispositivo historial){
+        Dispositivo dispositivo = dispositivoServicio.MostrarDispositivoID(id);
+        Turno_trabajo turno =  turnoServicio.MostrarTurnoID(1);
+        
+        // Ingresar otros campos por defecto
+        historial.setDispositivo(dispositivo);
+        historial.setTurno(turno);
+
+        historialDispositivoServicio.IngresarHistorial(historial);
     }
 }
