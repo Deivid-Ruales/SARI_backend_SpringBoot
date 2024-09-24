@@ -37,9 +37,18 @@ public class UsuarioControlador {
     
     @GetMapping
     public List<Usuario> MostrarUsuarios (){
+        // Obtener todos los usuarios
         var usuarios = usuarioServicio.MostrarTodosUsuarios();
-        usuarios.forEach(usuario -> logger.info(usuario.toString()));
-        return usuarios;
+        
+        // Declaro el rol que necesito filtrar del enum
+        Rol rol = Rol.Cliente;
+        
+        // Filtrar usuarios por el rol = empleado
+        List<Usuario> usuariosFiltrados = usuarios.stream()
+                .filter(usuario -> usuario.getRol() .equals(rol))
+                .collect(Collectors.toList());
+
+        return usuariosFiltrados;
     }
     
    @GetMapping("/{id}")
@@ -69,7 +78,6 @@ public class UsuarioControlador {
         usuario.setDireccion(usuarioNew.getDireccion());
         usuario.setEmail(usuarioNew.getEmail());
         usuario.setNombre(usuarioNew.getNombre());
-        usuario.setRol(usuarioNew.getRol());
         usuario.setTelefono(usuarioNew.getTelefono());
         
         usuarioServicio.IngresarUsuario(usuario);

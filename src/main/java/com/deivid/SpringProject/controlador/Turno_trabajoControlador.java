@@ -55,6 +55,8 @@ public class Turno_trabajoControlador {
         turno.setFecha_hora_inicio(turnoNew.getFecha_hora_inicio());
         turno.setFecha_hora_fin(turnoNew.getFecha_hora_fin());
         turno.setEstado(turnoNew.getEstado());
+        turno.setUsuario(turnoNew.getUsuario());
+        turno.setDispositivo(turnoNew.getDispositivo());
 
         turnoTrabajoServicio.IngresarTurno(turno);
         return ResponseEntity.ok(turno);
