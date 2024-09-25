@@ -7,6 +7,7 @@ import com.deivid.SpringProject.servicio.Turno_trabajoServicio;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class Turno_trabajoControlador {
     @GetMapping
     public List<Turno_trabajo> MostrarTurnos() {
         var turnos = turnoTrabajoServicio.MostrarTodosTurnos();
+        
+        // Filtrar por el estado activo
+        List<Turno_trabajo> turnosFiltrados = turnos.stream()
+                .filter(turno -> turno.getActive().equals(true))
+                .collect(Collectors.toList());
+        
         turnos.forEach(turno -> logger.info(turno.toString()));
         return turnos;
     }
@@ -36,12 +43,20 @@ public class Turno_trabajoControlador {
         if (turno == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del turno de trabajo: " + id);
         }
-        return ResponseEntity.ok(turno);
+        
+         if (turno.getActive() == true) {
+            return ResponseEntity.ok(turno);
+        } else {
+            return (ResponseEntity<Turno_trabajo>) ResponseEntity.notFound();
+        }
     }
 
     @PostMapping
     public void IngresarTurno(@RequestBody Turno_trabajo turno) {
         logger.info("Turno a ingresar: " + turno);
+        
+        turno.setActive(true);
+        
         turnoTrabajoServicio.IngresarTurno(turno);
     }
 
@@ -68,7 +83,10 @@ public class Turno_trabajoControlador {
         if (turno == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del turno de trabajo: " + id);
         }
-        turnoTrabajoServicio.EliminarTurno(turno);
+        
+        turno.setActive(false);
+        
+        turnoTrabajoServicio.IngresarTurno(turno);
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);

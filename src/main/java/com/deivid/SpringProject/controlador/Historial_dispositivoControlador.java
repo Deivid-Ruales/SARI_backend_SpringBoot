@@ -38,7 +38,7 @@ public class Historial_dispositivoControlador {
     public List<Historial_dispositivo> MostrarHistoriales() {
         var historiales = historialDispositivoServicio.MostrarTodosHistoriales();
         
-        // Filtrar dispositivos por el estado activo
+        // Filtrar por el estado activo
         List<Historial_dispositivo> historialesFiltrados = historiales.stream()
                 .filter(historial -> historial.getActive().equals(true))
                 .collect(Collectors.toList());
