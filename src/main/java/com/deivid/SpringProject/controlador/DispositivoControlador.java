@@ -24,15 +24,20 @@ public class DispositivoControlador {
 
     @Autowired
     private IDispositivoServicio dispositivoServicio;
-    
-    @Autowired 
+
+    @Autowired
     private IUsuarioServicio usuarioServicio;
 
     @GetMapping
     public List<Dispositivo> MostrarDispositivos() {
         var dispositivos = dispositivoServicio.MostrarTodosDispositivos();
-        dispositivos.forEach(dispositivo -> logger.info(dispositivo.toString()));
-        return dispositivos;
+
+        // Filtrar dispositivos por el estado activo
+        List<Dispositivo> dispositivosFiltrados = dispositivos.stream()
+                .filter(dispositivo -> dispositivo.getActive().equals(true))
+                .collect(Collectors.toList());
+
+        return dispositivosFiltrados;
     }
 
     @GetMapping("/{id}")
@@ -41,12 +46,19 @@ public class DispositivoControlador {
         if (dispositivo == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del dispositivo: " + id);
         }
-        return ResponseEntity.ok(dispositivo);
+
+        if (dispositivo.getActive() == true) {
+            return ResponseEntity.ok(dispositivo);
+        } else {
+            return (ResponseEntity<Dispositivo>) ResponseEntity.notFound();
+        }
     }
 
     @PostMapping
     public void IngresarDispositivo(@RequestBody Dispositivo dispositivo) {
         logger.info("Dispositivo a ingresar: " + dispositivo);
+        dispositivo.setActive(true);
+        
         dispositivoServicio.IngresarDispositivo(dispositivo);
     }
 
@@ -73,7 +85,10 @@ public class DispositivoControlador {
         if (dispositivo == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del dispositivo: " + id);
         }
-        dispositivoServicio.EliminarDispositivo(dispositivo);
+        
+        dispositivo.setActive(false);
+        
+        dispositivoServicio.IngresarDispositivo(dispositivo);
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
@@ -83,15 +98,16 @@ public class DispositivoControlador {
     public List<Dispositivo> MostrarDispositivoPorUsuario(@PathVariable Integer id) {
         // Obtener usuario por id
         var usuario = usuarioServicio.MostrarUsuarioID(id);
-                
+
         // Obtener todos los dispositivos
         var dispositivos = dispositivoServicio.MostrarTodosDispositivos();
 
         // Filtrar dispositivos por el id del usuario asociado
         List<Dispositivo> dispositivosFiltrados = dispositivos.stream()
-                .filter(dispositivo -> dispositivo.getUsuario() .equals(usuario))
+                .filter(dispositivo -> dispositivo.getUsuario().equals(usuario))
+                .filter(dispositivo -> dispositivo.getActive().equals(true))
                 .collect(Collectors.toList());
-
+        
         return dispositivosFiltrados;
     }
 }
