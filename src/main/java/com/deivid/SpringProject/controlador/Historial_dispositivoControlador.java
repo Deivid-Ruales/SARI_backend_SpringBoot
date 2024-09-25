@@ -37,8 +37,15 @@ public class Historial_dispositivoControlador {
     @GetMapping
     public List<Historial_dispositivo> MostrarHistoriales() {
         var historiales = historialDispositivoServicio.MostrarTodosHistoriales();
+        
+        // Filtrar dispositivos por el estado activo
+        List<Historial_dispositivo> historialesFiltrados = historiales.stream()
+                .filter(historial -> historial.getActive().equals(true))
+                .collect(Collectors.toList());
+
+        
         historiales.forEach(historial -> logger.info(historial.toString()));
-        return historiales;
+        return historialesFiltrados;
     }
 
     @GetMapping("/{id}")
@@ -47,12 +54,20 @@ public class Historial_dispositivoControlador {
         if (historial == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del historial de dispositivo: " + id);
         }
-        return ResponseEntity.ok(historial);
+        
+         if (historial.getActive() == true) {
+            return ResponseEntity.ok(historial);
+        } else {
+            return (ResponseEntity<Historial_dispositivo>) ResponseEntity.notFound();
+        }
     }
 
     @PostMapping
     public void IngresarHistorial(@RequestBody Historial_dispositivo historial) {
         logger.info("Historial a ingresar: " + historial);
+        
+        historial.setActive(true);
+        
         historialDispositivoServicio.IngresarHistorial(historial);
     }
 
@@ -81,7 +96,10 @@ public class Historial_dispositivoControlador {
         if (historial == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del historial de dispositivo: " + id);
         }
-        historialDispositivoServicio.EliminarHistorial(historial);
+        
+        historial.setActive(false);
+        
+        historialDispositivoServicio.IngresarHistorial(historial);
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
@@ -98,6 +116,7 @@ public class Historial_dispositivoControlador {
         // Filtrar dispositivos por el id del usuario asociado
         List<Historial_dispositivo> historialesFiltrados = historiales.stream()
                 .filter(historial -> historial.getDispositivo() .equals(dispositivo))
+                .filter(historial -> historial.getActive().equals(true))
                 .collect(Collectors.toList());
 
         return historialesFiltrados;
