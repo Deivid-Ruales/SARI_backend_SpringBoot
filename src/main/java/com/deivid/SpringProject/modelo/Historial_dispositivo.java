@@ -39,4 +39,5 @@ public class Historial_dispositivo {
     private String paginas_impresas;
     private String paginas_adf;
     private String observaciones;
+    private Boolean active;
 }

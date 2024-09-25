@@ -31,6 +31,7 @@ public class Usuario {
     private String direccion;
     private String telefono;
     private String contrasena;
+    private Boolean active;
     
     // Define una columna que almacena el rol del usuario usando el enum Rol
     @Enumerated(EnumType.STRING)

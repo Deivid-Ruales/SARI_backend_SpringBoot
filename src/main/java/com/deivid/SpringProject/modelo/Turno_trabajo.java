@@ -34,6 +34,8 @@ public class Turno_trabajo {
 
     // Se define la columna para la fecha y hora de fin
     private LocalDateTime fecha_hora_fin;
+    
+    private Boolean active;
 
     // Se define el estado usando el enum Estado
     @Enumerated(EnumType.STRING)

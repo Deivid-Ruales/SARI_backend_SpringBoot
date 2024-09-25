@@ -30,6 +30,7 @@ public class Dispositivo {
     private String referencia;
     private String serial_num;
     private String descripcion;
+    private Boolean active;
 
     // Define una relación muchos-a-uno con la entidad Usuario y la columna 'id_usuario'
     @ManyToOne
