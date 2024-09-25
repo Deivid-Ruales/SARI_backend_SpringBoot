@@ -46,6 +46,7 @@ public class UsuarioControlador {
         // Filtrar usuarios por el rol = empleado
         List<Usuario> usuariosFiltrados = usuarios.stream()
                 .filter(usuario -> usuario.getRol() .equals(rol))
+                .filter(usuario -> usuario.getActive().equals(true))
                 .collect(Collectors.toList());
 
         return usuariosFiltrados;
@@ -57,12 +58,22 @@ public class UsuarioControlador {
         if (usuario == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del usuario: " + id);
         }
-        return ResponseEntity.ok(usuario);
+        
+        if (usuario.getActive() == true){
+            return ResponseEntity.ok(usuario);
+        }else{
+            return (ResponseEntity<Usuario>) ResponseEntity.notFound();
+        }
+        
+        
     }
     
     @PostMapping
     public void IngresarUsuario (@RequestBody Usuario usuario) {
         logger.info("Usuario a ingresar: " + usuario);
+        
+        usuario.setActive(true);
+        
         usuarioServicio.IngresarUsuario(usuario);
     }
     
@@ -90,7 +101,10 @@ public class UsuarioControlador {
         if (usuario == null) {
             throw new ExcepcionRecursoNoEncontrado("No se encontró el Id del usuario: " + id);
         }
-        usuarioServicio.EliminarUsuario(usuario);
+        
+        usuario.setActive(false);
+        
+        usuarioServicio.IngresarUsuario(usuario);
         Map<String, Boolean> respuesta = new HashMap<>();
         respuesta.put("Eliminado", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
@@ -107,6 +121,7 @@ public class UsuarioControlador {
         // Filtrar usuarios por el rol = empleado
         List<Usuario> usuariosFiltrados = usuarios.stream()
                 .filter(usuario -> usuario.getRol() .equals(rol))
+                .filter(usuario -> usuario.getActive().equals(true))
                 .collect(Collectors.toList());
 
         return usuariosFiltrados;
