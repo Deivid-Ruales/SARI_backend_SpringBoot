@@ -130,6 +130,7 @@ public class Historial_dispositivoControlador {
         // Ingresar otros campos por defecto
         historial.setDispositivo(dispositivo);
         historial.setTurno(turno);
+        historial.setActive(true);
 
         historialDispositivoServicio.IngresarHistorial(historial);
     }
